@@ -1,4 +1,4 @@
-def crossSection(X, Transfo, E_neutron):
+def crossSection(X, Transfo, E_neutron=0.025):
     """
     Computes the cross section for a specific energy level
     ENDF database: https://www-nds.iaea.org/exfor/endf.htm
@@ -12,7 +12,7 @@ def crossSection(X, Transfo, E_neutron):
         ['Fission', 'Capture']
     :param E_neutron: array, list
         value(s) of the cross section for an incident neutron of energy level equal to E_neutron in [eV]
-        the value should be in the range [1e-5; 2e7] [eV]
+        the value should be in the range [1e-5; 1e6] [eV]
     :return: array, list
         values of the cross section in [barn] corresponding to the input parameters
     """
@@ -49,16 +49,20 @@ def crossSection(X, Transfo, E_neutron):
         },
     }
 
-
     # ==================================  Check arguments  ==================================
     #  Check that the nucleon/nuclide asked, and that the associated transformation exists in the database
-    if X != 'Th232' and X != 'Th233' and X != 'Pa233' and X != 'U233' and X != 'U235' and X != 'U236' and X != 'U237' and X != 'U238' \
-            and X != 'U239' and X != 'Np239' and X != 'Pu239' and X != 'Pu240' and X != 'Xe135':
-        print('\n WARNING : There is no database for element ', X, '. \n Please check function information')
-    
-    # sigma = 0.
+    if Transfo == 'Fission':
+        if (X != 'U235' and X != 'Pu239' and X != 'Pu241'):
+            print('\n WARNING : Fission does not imply the element ', X, '. \n Please check function information')
+            sigma = 0
 
+    elif Transfo == 'Capture':
+        if (X != 'Kr95' and X != 'Zr104' and X != 'Sn134' and X != 'U233' and X != 'U236' and X != 'U237' and X != 'U238' \
+                and X != 'U239' and X != 'Np239' and X != 'Pu240' and X != 'Xe135' and X != 'Ce135' and X != 'Xe136' and X != 'Np237' \
+                and X != 'Am241' and X != 'Am242' and X != 'Cm242' and X != 'Pu243' and X != 'Am243' and X != 'Cm243' and X != 'Am244' and X != 'Cm244'):
+
+            print('\n WARNING : Capture does not imply the element ', X, '. \n Please check function information')
+            sigma = 0
+
+    sigma = CrossSections[Transfo][X]
     return sigma
-
-# Try the function:
-# cs = crossSection(X='Pu240', Transfo='Fission', E_neutron=np.logspace(-5,6,10000).tolist())
