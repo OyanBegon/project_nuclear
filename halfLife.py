@@ -64,11 +64,13 @@ def halfLife(X, Transfo):
             and X != 'U239' and X != 'Np239' and X != 'Pu239' and X != 'Pu240' and X != 'Xe135':
         print('\n WARNING : There is no database for element ', X, '. \n Please check function information')
 
+        hl = 0.
+
      # Check whether the transformation exists or not
     if Transfo != 'Alpha' and Transfo != 'BetaMinus' and Transfo != 'BetaPlus' and Transfo != 'Gamma': # Transfos Gamma très courtes
         print('\n WARNING : These transformation are not implemented :', Transfo, '.\n Please check function information')
 
-    # hl = 0.
+        hl = 0.
 
     return hl
 
